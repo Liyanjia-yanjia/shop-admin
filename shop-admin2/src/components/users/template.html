@@ -1,0 +1,90 @@
+<div>
+  <!--面包屑-->
+  <el-breadcrumb separator-class="el-icon-arrow-right" class="breadLink">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+    <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+  </el-breadcrumb>
+
+  <!--搜索框-->
+  <div class="searchBox">
+    <el-row :gutter=20>
+      <el-col :span=8>
+        <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click="searchUser"></el-button>
+        </el-input>
+      </el-col>
+      <el-col :span=4>
+        <el-button type="success" plain @click="showAddMask">添加用户</el-button>
+      </el-col>
+    </el-row>
+  </div>
+
+  <!-- 用户列表 -->
+  <el-table :data="userList" style="width: 100%">
+    <el-table-column prop="username" label="姓名" width="180"></el-table-column>
+    <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
+    <el-table-column prop="mobile" label="电话" width="180"></el-table-column>
+    <el-table-column label="状态" width="250">
+      <template slot-scope="scope">
+        <el-switch v-model="scope.row.mg_state" @change="changeUserState(scope.row)">
+        </el-switch>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作">
+      <template slot-scope="scope">
+        <el-row>
+          <el-button type="primary" plain icon="el-icon-edit" @click="showEditUser(scope.row)"></el-button>
+          <el-button type="danger" plain icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
+          <el-button type="success" plain icon="el-icon-check">分配角色</el-button>
+        </el-row>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <!-- 分页 -->
+  <el-pagination background layout="prev, pager, next" :total="total" :current-page="pagenum" :page-size="pagesize"
+    @current-change="changePage">
+  </el-pagination>
+
+  <!-- 编辑用户模态框 -->
+  <el-dialog title="编辑用户" :visible.sync="dialogEditFormVisible">
+    <el-form :model="editForm">
+      <el-form-item label="用户名" label-width="120px">
+        <el-tag type="info">{{editForm.username}}</el-tag>
+      </el-form-item>
+      <el-form-item label="邮箱" label-width="120px">
+        <el-input v-model="editForm.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="手机" label-width="120px">
+        <el-input v-model="editForm.mobile" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="editUser">确 定</el-button>
+    </div>
+  </el-dialog>
+
+  <!-- 添加用户模态框 -->
+  <el-dialog title="添加用户" :visible.sync="dialogAddFormVisible" @close="resetForm">
+    <el-form :model="addForm" :rules="rules" ref="aa">
+      <el-form-item label="用户名" label-width="120px" prop="username">
+        <el-input v-model="addForm.username" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" label-width="120px" prop="password">
+        <el-input v-model="addForm.password" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" label-width="120px" prop="email">
+        <el-input v-model="addForm.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="手机" label-width="120px" prop="mobile">
+        <el-input v-model="addForm.mobile" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="hideAddMask">确 定</el-button>
+    </div>
+  </el-dialog>
+</div>
