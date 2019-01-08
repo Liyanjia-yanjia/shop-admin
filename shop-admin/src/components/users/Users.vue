@@ -2,7 +2,7 @@
 
 <script src="./script.js"></script>
 
-<style>
+<style scoped>
 .userTable {
   margin-top: 20px;
 }

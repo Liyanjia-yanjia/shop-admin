@@ -136,14 +136,14 @@ export default {
           email,
           mobile
         })
-        this.dialogEditFormVisible = false
         if (res.data.meta.status === 200) {
-          this.getUsers(1, this.searchText)
+          this.dialogEditFormVisible = false
           this.$message({
             type: 'success',
             message: res.data.meta.msg,
             duration: 1000
           })
+          this.getUsers(1, this.searchText)
         }
       } catch (error) {
         this.$message({
